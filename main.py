@@ -213,4 +213,4 @@ def main():
         return jsonify({"msg": "User not found"}), 404
 
 if __name__ == '__main__':
-    app.run(port=os.getenv("PORT", default=5000), port=5000, debug=True)
+      app.run(debug=True, port=os.getenv("PORT", default=5000))
