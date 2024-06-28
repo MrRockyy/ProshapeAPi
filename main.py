@@ -34,13 +34,13 @@ app.config['JWT_SECRET_KEY'] = 'Cxv24KPcpogXnqgpDAXF'
 jwt = JWTManager(app)
 CORS(app)
 
-client = MongoClient("mongodb://mongo:ZQpedkvelHbBzqmuGuryViNnmlfEdEui@mongodb.railway.internal:27017")
+client = MongoClient("mongodb+srv://proshape:a0A8y0PTVONUd7au@cluster0.navtwdq.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0")
 db = client['proshape']
 users_collection = db['users']
 events_collection = db['events']
 @app.route('/test', methods=['GEt'])
 def test():
-      return jsonify({"msg": "la puta madere"})
+      return jsonify({"msg": "puta madre"})
     
 @app.route('/api/register', methods=['POST'])
 def register():
