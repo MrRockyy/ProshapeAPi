@@ -6,7 +6,7 @@ from flask_cors import CORS
 from bson import json_util, ObjectId
 from datetime import datetime, timedelta
 import pytz
-
+import os
 def generar_array_fechas():
     fecha_actual = datetime.utcnow().replace(tzinfo=pytz.utc)
     zona_bogota = pytz.timezone('America/Bogota')
@@ -213,4 +213,4 @@ def main():
         return jsonify({"msg": "User not found"}), 404
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=5000, debug=True)
+    app.run(port=os.getenv("PORT", default=5000), port=5000, debug=True)
