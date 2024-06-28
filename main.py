@@ -38,9 +38,9 @@ client = MongoClient("mongodb://mongo:ZQpedkvelHbBzqmuGuryViNnmlfEdEui@mongodb.r
 db = client['proshape']
 users_collection = db['users']
 events_collection = db['events']
-@app.route('/test', methods=['POST'])
+@app.route('/test', methods=['GEt'])
 def test():
-    return{{"hola":"mundo"}}
+      return jsonify({"msg": "la puta madere"})
     
 @app.route('/api/register', methods=['POST'])
 def register():
