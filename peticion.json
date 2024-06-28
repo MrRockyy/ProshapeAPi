@@ -1,0 +1,146 @@
+[
+    {
+      "teacher": "Ana García",
+      "date": "2024-07-01",
+      "cupo": 15,
+      "num": 1,
+      "letter": "S",
+      "type": "Pilates",
+      "nameEvent": "Clase de Pilates matutina",
+      "description": "Una clase de Pilates para comenzar el día con energía.",
+      "cupoNow": 0
+    },
+    {
+      "teacher": "María López",
+      "date": "2024-07-02",
+      "cupo": 20,
+      "num": 2,
+      "letter": "D",
+      "type": "Pilates",
+      "nameEvent": "Pilates en la tarde",
+      "description": "Relájate y fortalece tu cuerpo con esta clase de Pilates al final del día.",
+      "cupoNow": 0
+    },
+    {
+      "teacher": "Laura González",
+      "date": "24-07-03",
+      "cupo": 15,
+      "num": 3,
+      "letter": "L",
+      "type": "Pilates",
+      "nameEvent": "Clase de Pilates con música",
+      "description": "Disfruta de una sesión de Pilates acompañada de música que te motivará a moverte.",
+      "cupoNow": 0
+    },
+    {
+      "teacher": "Patricia Ruiz",
+      "date": "2024-07-04",
+      "cupo": 16,
+      "num": 4,
+      "letter": "M",
+      "type": "Pilates",
+      "nameEvent": "Pilates para la espalda",
+      "description": "Enfoca esta sesión de Pilates en fortalecer y mejorar la salud de tu espalda.",
+      "cupoNow": 0
+    },
+    {
+      "teacher": "Laura González",
+      "date": "24-07-06",
+      "cupo": 15,
+      "num": 6,
+      "letter": "V",
+      "type": "Pilates",
+      "nameEvent": "Pilates para flexibilidad",
+      "description": "Trabaja en mejorar tu flexibilidad y movilidad con esta clase de Pilates enfocada en estiramientos.",
+      "cupoNow": 0
+    },
+    {
+      "teacher": "Patricia Ruiz",
+      "date": "24-07-07",
+      "cupo": 16,
+      "num": 7,
+      "letter": "S",
+      "type": "Pilates",
+      "nameEvent": "Pilates de mañana",
+      "description": "Despierta tu cuerpo y mente con esta clase de Pilates matutina.",
+      "cupoNow": 0
+    },
+    {
+      "teacher": "Andrea Díaz",
+      "date": "24-07-08",
+      "cupo": 18,
+      "num": 8,
+      "letter": "D",
+      "type": "Pilates",
+      "nameEvent": "Pilates con pelotas",
+      "description": "Añade un desafío extra a tu práctica de Pilates utilizando pelotas de ejercicio en esta clase.",
+      "cupoNow": 0
+    },
+    {
+      "teacher": "Laura González",
+      "date": "24-07-09",
+      "cupo": 15,
+      "num": 9,
+      "letter": "L",
+      "type": "Pilates",
+      "nameEvent": "Clase de Pilates con música",
+      "description": "Disfruta de una sesión de Pilates acompañada de música que te motivará a moverte.",
+      "cupoNow": 0
+    },
+    {
+      "teacher": "Patricia Ruiz",
+      "date": "24-07-10",
+      "cupo": 16,
+      "num": 10,
+      "letter": "M",
+      "type": "Pilates",
+      "nameEvent": "Pilates para la espalda",
+      "description": "Enfoca esta sesión de Pilates en fortalecer y mejorar la salud de tu espalda.",
+      "cupoNow": 0
+    },
+    {
+      "teacher": "Andrea Díaz",
+      "date": "24-07-11",
+      "cupo": 18,
+      "num": 11,
+      "letter": "J",
+      "type": "Pilates",
+      "nameEvent": "Pilates en familia",
+      "description": "Una clase de Pilates diseñada para disfrutar en familia, adecuada para todas las edades.",
+      "cupoNow": 0
+    },
+    {
+      "teacher": "Laura González",
+      "date": "24-07-12",
+      "cupo": 15,
+      "num": 12,
+      "letter": "V",
+      "type": "Pilates",
+      "nameEvent": "Pilates para flexibilidad",
+      "description": "Trabaja en mejorar tu flexibilidad y movilidad con esta clase de Pilates enfocada en estiramientos.",
+      "cupoNow": 0
+    },
+    {
+      "teacher": "Patricia Ruiz",
+      "date": "24-07-13",
+      "cupo": 16,
+      "num": 13,
+      "letter": "S",
+      "type": "Pilates",
+      "nameEvent": "Pilates de mañana",
+      "description": "Despierta tu cuerpo y mente con esta clase de Pilates matutina.",
+      "cupoNow": 0
+    },
+    {
+      "teacher": "Andrea Díaz",
+      "date": "24-07-14",
+      "cupo": 18,
+      "num": 14,
+      "letter": "D",
+      "type": "Pilates",
+      "nameEvent": "Pilates con pelotas",
+      "description": "Añade un desafío extra a tu práctica de Pilates utilizando pelotas de ejercicio en esta clase.",
+      "cupoNow": 0
+    }
+    
+]
