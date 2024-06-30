@@ -62,9 +62,27 @@ def register():
         return jsonify({"msg": "Username already exists"}), 400
 
     hashed_password = generate_password_hash(password)
-    users_collection.insert_one({"direction":direction,"description":description,"descriptionStatus":descriptionStatus,"dateEndShort":"", "dateEndlong":"", "main3":0,"main2":0,"main1":0,"classes": [], "phone": phone, "dateStart": dateStart, "plan": "", "rol": "user", "date": date, "genre": genre, "photo": photo, "name": name, "username": username, "password": hashed_password})
+    users_collection.insert_one({"direction":direction,"description":description,"descriptionStatus":descriptionStatus,"msg":"","notes":"","nameShort":"","dateEndShort":"", "dateEndlong":"", "main3":0,"main2":0,"main1":0,"classes": [], "phone": phone, "dateStart": dateStart, "plan": "", "rol": "user", "date": date, "genre": genre, "photo": photo, "name": name, "username": username, "password": hashed_password})
 
     return jsonify({"msg": "User created successfully"}), 201
+@app.route('/api/update_user', methods=['PUT'])
+@jwt_required()
+def update_user():
+    current_user = get_jwt_identity()
+    data = request.get_json()
+
+    update_fields = {}
+    for field in ["direction", "description", "descriptionStatus", "msg", "notes", "nameShort",
+                  "dateEndShort", "dateEndlong", "main3", "main2", "main1", "classes",
+                  "phone", "dateStart", "plan", "rol", "date", "genre", "photo", "name", "username"]:
+        if field in data:
+            update_fields[field] = data[field]
+
+    if update_fields:
+        users_collection.update_one({"username": current_user}, {"$set": update_fields})
+        return jsonify({"msg": "User updated successfully"}), 200
+    else:
+        return jsonify({"msg": "No fields to update"}), 400
 
 @app.route('/api/login', methods=['POST'])
 def login():
