@@ -7,7 +7,8 @@ from bson import json_util, ObjectId
 from datetime import datetime, timedelta
 import pytz
 import os
-
+from bson import ObjectId
+from bson.json_util import dumps
 def generar_array_fechas():
     fecha_actual = datetime.utcnow().replace(tzinfo=pytz.utc)
     zona_bogota = pytz.timezone('America/Bogota')
@@ -35,11 +36,13 @@ app.config['JWT_SECRET_KEY'] = 'Cxv24KPcpogXnqgpDAXF'
 jwt = JWTManager(app)
 CORS(app)
 
+
 client = MongoClient("mongodb+srv://proshape:a0A8y0PTVONUd7au@cluster0.navtwdq.mongodb.net/?retryWrites=true&w=majority&tls=true&tlsAllowInvalidCertificates=true")
 db = client['proshape']
 users_collection = db['users']
 types_collection = db['types']
 events_collection = db['events']
+plans_collection = db['plans']
 comprobantes_collection = db['comprobantes']
 
 @app.route('/test', methods=['GET'])
@@ -168,11 +171,23 @@ def update():
     else:
         return jsonify({"msg": "No fields to update"}), 400
 
+
+################ GET MEMBERS ###########################
+
+@app.route('/api/clients', methods=['GET'])
+@jwt_required()
+def get_clients():
+    users = users_collection.find({"rol":"1"}, {"_id": 0})
+    return jsonify([user for user in users]), 200
+
+
 @app.route('/api/users', methods=['GET'])
 def get_users():
     users = users_collection.find({}, {"_id": 0})
     return jsonify([user for user in users]), 200
 
+
+###############################################
 @app.route('/api/types', methods=['POST'])
 def types():
     data = request.get_json()
@@ -182,12 +197,138 @@ def types():
     types_collection.insert_one({"photo": photo, "description": description, "name": name})
 
     return jsonify({"msg": "Type created successfully"}), 201
+@app.route('/api/types', methods=['PUT'])
+def update_type_by_name():
+    data = request.get_json()
+    type_id = data.get("_id")
+    name = data.get("name")
+    photo = data.get("photo")
+    description = data.get("description")
+    print(type_id)
+    
+
+    update_data = {}
+    update_data["name"] = name
+    if photo is not None:
+        update_data["photo"] = photo
+    if description is not None:
+        update_data["description"] = description
+
+    
+    result = types_collection.update_one({"_id": ObjectId(type_id)}, {"$set": update_data})
+    if result.matched_count == 0:
+            return jsonify({"msg": "Type not found"}), 434
+ 
+    return jsonify({"msg": "Type updated successfully"}), 200
+
 
 @app.route('/api/types/names', methods=['GET'])
 def get_type_names():
     types = types_collection.find({}, {"name": 1, "_id": 0})
     names = [type_['name'] for type_ in types]
     return jsonify({"types": names}), 200
+
+@app.route('/api/types', methods=['GET'])
+def get_type():
+    types = types_collection.find({})
+    # Converting ObjectId to string
+    types_list = []
+    for type in types:
+        type['_id'] = str(type['_id'])
+        types_list.append(type)
+    return jsonify(types_list), 200
+
+@app.route('/api/types/delete', methods=['POST'])
+def delete_type():
+    data = request.get_json()
+    type_id = data.get('_id')
+
+    if not type_id:
+        return jsonify({'message': 'ID is required'}), 400
+
+    try:
+        result = types_collection.delete_one({'_id': ObjectId(type_id)})
+        if result.deleted_count == 1:
+            return jsonify({'message': 'Type deleted successfully'}), 200
+        else:
+            return jsonify({'message': 'Type not found'}), 404
+    except Exception as e:
+        print(e)
+        return jsonify({'message': str(e)}), 400
+######################## PLANS ########################################3
+
+@app.route('/api/plans/names', methods=['GET'])
+def get_plans_names():
+    types = plans_collection.find({}, {"name": 1, "_id": 0})
+    names = [type_['name'] for type_ in types]
+    return jsonify({"types": names}), 200
+
+
+@app.route('/api/plans', methods=['GET'])
+def get_plans():
+    types = plans_collection.find({})
+    # Converting ObjectId to string
+    types_list = []
+    for type in types:
+        type['_id'] = str(type['_id'])
+        types_list.append(type)
+    return jsonify(types_list), 200
+
+@app.route('/api/plans', methods=['POST'])
+def plansPost():
+    data = request.get_json()
+    days = data.get("days")
+    description = data.get("description")
+    name = data.get("name")
+    color = data.get("color")
+    plans_collection.insert_one({"days": int(days), "color":color,"description": description, "name": name})
+
+    return jsonify({"msg": "Plan created successfully"}), 201
+@app.route('/api/plans', methods=['PUT'])
+def update_plans_by_name():
+    data = request.get_json()
+    type_id = data.get("_id")
+    name = data.get("name")
+    days = data.get("days")
+    color = data.get("color")
+    description = data.get("description")
+    print(type_id)
+    
+
+    update_data = {}
+    update_data["color"] =color
+    update_data["name"] = name
+    if days is not None:
+        update_data["days"] = days
+    if description is not None:
+        update_data["descsiption"] = description
+
+    
+    result = plans_collection.update_one({"_id": ObjectId(type_id)}, {"$set": update_data})
+    if result.matched_count == 0:
+            return jsonify({"msg": "Type not found"}), 434
+ 
+    return jsonify({"msg": "Type updated successfully"}), 200
+
+
+@app.route('/api/plans/delete', methods=['POST'])
+def delete_plan():
+    data = request.get_json()
+    type_id = data.get('_id')
+
+    if not type_id:
+        return jsonify({'message': 'ID is required'}), 400
+
+    try:
+        result = plans_collection.delete_one({'_id': ObjectId(type_id)})
+        if result.deleted_count == 1:
+            return jsonify({'message': 'Type deleted successfully'}), 200
+        else:
+            return jsonify({'message': 'Type not found'}), 404
+    except Exception as e:
+        print(e)
+        return jsonify({'message': str(e)}), 400
+#################################################
 
 @app.route('/api/entrenadores/names', methods=['GET'])
 def get_entrenadores_names():
