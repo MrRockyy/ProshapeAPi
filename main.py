@@ -121,6 +121,19 @@ def login():
         return jsonify(access_token=access_token), 200
 
     return jsonify({"msg": "Bad username or password"}), 401
+@app.route('/api/login/page', methods=['POST'])
+def loginPage():
+    data = request.get_json()
+    username = data.get('username')
+    password = data.get('password')
+
+    user = users_collection.find_one({"username": username, "rol":"3"})
+
+    if user and check_password_hash(user['password'], password):
+        access_token = create_access_token(identity=username)
+        return jsonify(access_token=access_token), 200
+
+    return jsonify({"msg": "Bad username or password"}), 401
 
 @app.route('/api/events', methods=['GET'])
 def events():
