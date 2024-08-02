@@ -92,7 +92,7 @@ def register():
     genre = data.get('genre')
     photo = data.get('photo')
     name = data.get('name')
-    direction = data.get('direccion')
+    direction = data.get('direction')
     description = data.get('description')
     descriptionStatus = data.get('descriptionStatus')
 
@@ -102,7 +102,7 @@ def register():
     hashed_password = generate_password_hash(password)
     users_collection.insert_one({
         "typeDocument": typeDocument, "direction": direction, "description": description, "descriptionStatus": descriptionStatus, "msg": "", "notes": "", "nameShort": "",
-        "dateEndShort": "", "dateEndlong": "", "main3": 0, "main2": 0, "main1": 0, "classes": [], "phone": phone, "dateStart": dateStart, "plan": "", "rol": "user", "date": date, 
+        "dateEndShort": "", "dateEndlong": "", "main3": 0, "main2": 0, "main1": 0, "classes": [], "phone": phone, "dateStart": dateStart, "plan": "Sin plan", "rol": "1", "date": date, 
         "genre": genre, "photo": photo, "name": name, "username": username, "password": hashed_password
     })
 
@@ -172,13 +172,79 @@ def update():
         return jsonify({"msg": "No fields to update"}), 400
 
 
-################ GET MEMBERS ###########################
+################ MEMBERS ###########################
 
 @app.route('/api/clients', methods=['GET'])
 @jwt_required()
 def get_clients():
-    users = users_collection.find({"rol":"1"}, {"_id": 0})
-    return jsonify([user for user in users]), 200
+    users = users_collection.find({"rol":"1"})
+    client_list = []
+    for user in users:
+            user['_id'] = str(user['_id'])
+            client_list.append(user)
+    return jsonify(client_list), 200
+
+@app.route('/api/trainers', methods=['GET'])
+
+def get_trainers():
+    users = users_collection.find({"rol":"2"})
+    client_list = []
+    for user in users:
+            user['_id'] = str(user['_id'])
+            client_list.append(user)
+    return jsonify(client_list), 200
+
+@app.route('/api/admins', methods=['GET'])
+@jwt_required()
+def get_admins():
+    users = users_collection.find({"rol":"3"})
+    client_list = []
+    for user in users:
+            user['_id'] = str(user['_id'])
+            client_list.append(user)
+    return jsonify(client_list), 200
+
+@app.route('/api/user/delete', methods=['POST'])
+@jwt_required()
+def deleteUSer():
+    data = request.get_json()
+    current_user = data["_id"]
+    result = users_collection.delete_one({"_id": ObjectId(current_user)})
+    if result.deleted_count == 1:
+        return jsonify({"msg": "User deleted successfully"}), 200
+    else:
+        return jsonify({"msg": "User not found"}), 404
+   
+   
+@app.route('/api/user/update/password', methods=['PUT'])
+@jwt_required()
+def updateUserPassword():
+    data = request.get_json()
+    hashed_password = generate_password_hash(data["password"])
+    current_user = data["_id"]
+    users_collection.update_one({"_id": ObjectId(current_user)}, {"$set": {"password":hashed_password}})
+    return jsonify({"msg": "User updated successfully"}), 200
+ 
+
+
+
+@app.route('/api/user/upgrade', methods=['PUT'])
+@jwt_required()
+def updateUser():
+    data = request.get_json()
+    current_user = data["_id"]
+    update_fields = {field: data[field] for field in [
+        "direction", "description", "descriptionStatus", "msg", "notes", "nameShort",
+        "dateEndShort", "dateEndlong", "main3", "main2", "main1", "classes",
+        "phone", "dateStart", "plan", "rol", "date", "genre", "photo", "name", "username", "typeDocument"
+    ] if field in data}
+
+    if update_fields:
+        users_collection.update_one({"_id": ObjectId(current_user)}, {"$set": update_fields})
+        return jsonify({"msg": "User updated successfully"}), 200
+    else:
+        return jsonify({"msg": "No fields to update"}), 400
+
 
 
 @app.route('/api/users', methods=['GET'])
