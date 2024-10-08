@@ -75,14 +75,30 @@ def comprobante():
     photo = data.get("photo")
     date = data.get("date")
     name = data.get("name")
+    plan=data.get("plan")
     profilePhoto = data.get("profilePhoto")
-    comprobantes_collection.insert_one({"name": name, "profilePhoto": profilePhoto, "photo": photo, "username": current_user, "date": date, "status": False})
+    comprobantes_collection.insert_one({"plan":plan, "name": name, "profilePhoto": profilePhoto, "photo": photo, "username": current_user, "date": date, "status": False})
 
     return jsonify({"msg": "Comprobante created successfully"}), 201
+
+@app.route('/api/comprobante', methods=['GET'])
+@jwt_required()
+def get_all_comprobantes():
+    # Obtener todos los comprobantes de la colección
+    comprobantes = comprobantes_collection.find()
+    
+    # Convertir el cursor de MongoDB a una lista y transformar a un formato serializable en JSON
+    comprobantes_list = []
+    for comprobante in comprobantes:
+        comprobante['_id'] = str(comprobante['_id'])  # Convertir ObjectId a cadena
+        comprobantes_list.append(comprobante)
+    
+    return jsonify(comprobantes_list), 200
 
 @app.route('/api/register', methods=['POST'])
 def register():
     data = request.get_json()
+    print(data)
     username = data.get('username')
     password = data.get('password')
     phone = data.get('phone')
@@ -360,7 +376,8 @@ def plansPost():
     description = data.get("description")
     name = data.get("name")
     color = data.get("color")
-    plans_collection.insert_one({"days": int(days), "color":color,"description": description, "name": name})
+    numberClass=data.get("numberClass")
+    plans_collection.insert_one({"numberClass":int(numberClass),"days": int(days), "color":color,"description": description, "name": name})
 
     return jsonify({"msg": "Plan created successfully"}), 201
 @app.route('/api/plans', methods=['PUT'])
@@ -370,24 +387,32 @@ def update_plans_by_name():
     name = data.get("name")
     days = data.get("days")
     color = data.get("color")
+    numberClass = data.get("numberClass")
     description = data.get("description")
     print(type_id)
     
-
     update_data = {}
-    update_data["color"] =color
-    update_data["name"] = name
+    
+    if color is not None:
+        update_data["color"] = color
+    if name is not None:
+        update_data["name"] = name
     if days is not None:
         update_data["days"] = days
     if description is not None:
-        update_data["descsiption"] = description
-
+        update_data["description"] = description  # Arreglé el error tipográfico
+    
+    # Si quieres actualizar también numberClass
+    if numberClass is not None:
+        update_data["numberClass"] = numberClass
     
     result = plans_collection.update_one({"_id": ObjectId(type_id)}, {"$set": update_data})
+    
     if result.matched_count == 0:
-            return jsonify({"msg": "Type not found"}), 434
+        return jsonify({"msg": "Plan not found"}), 404  # Código de error 404 para "no encontrado"
  
-    return jsonify({"msg": "Type updated successfully"}), 200
+    return jsonify({"msg": "Plan updated successfully"}), 200
+
 
 
 @app.route('/api/plans/delete', methods=['POST'])
